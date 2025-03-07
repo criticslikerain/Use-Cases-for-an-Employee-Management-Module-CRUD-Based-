@@ -46,8 +46,8 @@ A collaborative project where each team member is responsible for implementing a
 ## 🚀 How to Run the Project
 1. **Clone the repository**
    ```sh
-   git clone [https://github.com/your-repo-name.git](https://github.com/criticslikerain/Use-Cases-for-an-Employee-Management-Module-CRUD-Based-.git)
-   cd [your-repo-name](https://github.com/criticslikerain/Use-Cases-for-an-Employee-Management-Module-CRUD-Based-.git)
+   git clone (https://github.com/criticslikerain/Use-Cases-for-an-Employee-Management-Module-CRUD-Based-.git)
+   cd (https://github.com/criticslikerain/Use-Cases-for-an-Employee-Management-Module-CRUD-Based-.git)
 
 
 
