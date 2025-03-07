@@ -52,14 +52,14 @@ A collaborative project where each team member is responsible for implementing a
    ```sh
    npm install @angular/common @angular/core bcrypt class-transformer class-validator cors dotenv express express-validator joi mysql2 reflect-metadata rxjs typeorm
 
-   npm install @angular/common @angular/core bcrypt class-transformer class-validator cors dotenv express express-validator joi mysql2 reflect-metadata rxjs typeorm
+   npm install --save-dev @types/bcrypt @types/cors @types/express @types/node nodemon ts-node typescript
+
 3. **Create a database called "midterm" on MySQL**
    ```sh
    CREATE DATABASE midterm;
 4. **Run the Project**
    ```sh
    npx ts-node server.ts
-
 
 Make sure all the possible routes will be included
 
