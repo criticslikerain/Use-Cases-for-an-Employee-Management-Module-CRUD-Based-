@@ -1,41 +1,83 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { AppDataSource } from "../_helper/db";
+import { Employee } from "./employee.entity";
+import { Department } from "./department.entity";
+import bcrypt from "bcrypt";
 
-@Injectable({
-  providedIn: 'root',
-})
 export class EmployeeService {
-  private apiUrl = 'https://api.example.com/employees';
-  private departmentApiUrl = 'https://api.example.com/departments';
+  private employeeRepository = AppDataSource.getRepository(Employee);
+  private departmentRepository = AppDataSource.getRepository(Department);
 
-  constructor(private http: HttpClient) {}
 
-  getEmployees(): Observable<any> {
-    return this.http.get<any>(this.apiUrl);
+  async createEmployee(
+    name: string,
+    position: string,
+    departmentID: number,
+    hireDate: Date,
+    salary: number,
+    projectID: number,
+    employeeID: string,
+    yearsOfService: number,
+    password: string
+  ) {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const department = await this.departmentRepository.findOne({ where: { id: departmentID } });
+
+    if (!department) {
+      throw new Error("Department not found");
+    }
+
+    const newEmployee = this.employeeRepository.create({
+      name,
+      position,
+      department,
+      hireDate,
+      departmentID,
+      salary,
+      projectID,
+      employeeID,
+      yearsOfService,
+      password: hashedPassword,
+    });
+
+    return this.employeeRepository.save(newEmployee);
   }
 
-  getEmployeeById(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${id}`);
+  async getEmployees() {
+    return this.employeeRepository.find({ relations: ["department"] });
   }
 
-  createEmployee(employee: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, employee);
+  async getEmployeeById(id: number) {
+    return this.employeeRepository.findOne({ where: { id }, relations: ["department"] });
   }
 
-  updateEmployee(id: number, employee: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${id}`, employee);
+  async updateEmployee(id: number, updateData: Partial<Employee>) {
+    await this.employeeRepository.update(id, updateData);
+    return this.getEmployeeById(id);
   }
 
-  deleteEmployee(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  async deleteEmployee(id: number) {
+    return this.employeeRepository.delete(id);
   }
 
-  getDepartments(): Observable<any> {
-    return this.http.get<any>(this.departmentApiUrl);
+  async createDepartment(name: string) {
+    const newDepartment = this.departmentRepository.create({ name });
+    return this.departmentRepository.save(newDepartment);
   }
 
-  getDepartmentById(id: number): Observable<any> {
-    return this.http.get<any>(`${this.departmentApiUrl}/${id}`);
+  async getDepartments() {
+    return this.departmentRepository.find();
+  }
+
+  async getDepartmentById(id: number) {
+    return this.departmentRepository.findOne({ where: { id } });
+  }
+
+  async updateDepartment(id: number, name: string) {
+    await this.departmentRepository.update(id, { name });
+    return this.getDepartmentById(id);
+  }
+
+  async deleteDepartment(id: number) {
+    return this.departmentRepository.delete(id);
   }
 }
