@@ -46,10 +46,19 @@ A collaborative project where each team member is responsible for implementing a
 ## 🚀 How to Run the Project
 1. **Clone the repository**
    ```sh
-   git clone (https://github.com/criticslikerain/Use-Cases-for-an-Employee-Management-Module-CRUD-Based-.git)
-   cd (https://github.com/criticslikerain/Use-Cases-for-an-Employee-Management-Module-CRUD-Based-.git)
+   git clone https://github.com/criticslikerain/Use-Cases-for-an-Employee-Management-Module-CRUD-Based-.git
+   cd Use-Cases-for-an-Employee-Management-Module-CRUD-Based-
+2. **Install the dependencies**
+   ```sh
+   npm install @angular/common @angular/core bcrypt class-transformer class-validator cors dotenv express express-validator joi mysql2 reflect-metadata rxjs typeorm
 
-
+   npm install @angular/common @angular/core bcrypt class-transformer class-validator cors dotenv express express-validator joi mysql2 reflect-metadata rxjs typeorm
+3. **Create a database called "midterm" on MySQL**
+   ```sh
+   CREATE DATABASE midterm;
+4. **Run the Project**
+   ```sh
+   npx ts-node server.ts
 
 
 Make sure all the possible routes will be included
