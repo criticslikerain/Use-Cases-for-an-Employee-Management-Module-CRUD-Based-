@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from 'typeorm';
 import { Department } from '../departments/department.entity';
 
 @Entity()
@@ -7,13 +7,10 @@ export class Employee {
     id!: number;
 
     @Column()
-    firstName!: string;
+    Name!: string;
 
-    @Column()
-    lastName!: string;
-
-    @Column()
-    email!: string;
+    @Column({nullable: true})
+    salary!: number;
 
     @Column()
     position!: string;
@@ -23,6 +20,9 @@ export class Employee {
 
     @Column({ default: true })
     isActive!: boolean;
+     
+    @CreateDateColumn()
+    hireDate!: Date;
 }
 
 export default Employee; 

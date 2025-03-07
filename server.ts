@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import { AppDataSource } from "./_helpers/db";
 import userRoutes from "./employee/employee.controller";
+import departmentRoutes from "./departments/department.controller";
 import "reflect-metadata";
 
 dotenv.config();
@@ -11,7 +12,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/users", userRoutes);
+app.use("/employees", userRoutes);
+app.use("/department", departmentRoutes);
 
 AppDataSource.initialize()
   .then(() => {
