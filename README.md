@@ -48,3 +48,15 @@ A collaborative project where each team member is responsible for implementing a
    ```sh
    git clone [https://github.com/your-repo-name.git](https://github.com/criticslikerain/Use-Cases-for-an-Employee-Management-Module-CRUD-Based-.git)
    cd [your-repo-name](https://github.com/criticslikerain/Use-Cases-for-an-Employee-Management-Module-CRUD-Based-.git)
+
+
+
+
+Make sure all the possible routes will be included
+
+For POSTING: 
+GET 
+UPDATE 
+DELETE 
+PUT 
+
