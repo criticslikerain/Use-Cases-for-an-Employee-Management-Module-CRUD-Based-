@@ -1,34 +1,41 @@
-import { AppDataSource } from "../helpers/db";
-import { User } from "../users/user.entity";
-import { Repository } from "typeorm";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-export class UserService {
-  private userRepository: Repository<User>;
+@Injectable({
+  providedIn: 'root',
+})
+export class EmployeeService {
+  private apiUrl = 'https://api.example.com/employees';
+  private departmentApiUrl = 'https://api.example.com/departments';
 
-  constructor() {
-    this.userRepository = AppDataSource.getRepository(User);
+  constructor(private http: HttpClient) {}
+
+  getEmployees(): Observable<any> {
+    return this.http.get<any>(this.apiUrl);
   }
 
-  async getAllUsers(): Promise<User[]> {
-    return await this.userRepository.find();
+  getEmployeeById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
 
-  async getUserById(id: number): Promise<User | null> {
-    return await this.userRepository.findOneBy({ id });
+  createEmployee(employee: any): Observable<any> {
+    return this.http.post<any>(this.apiUrl, employee);
   }
 
-  async createUser(userData: Partial<User>): Promise<User> {
-    const newUser = this.userRepository.create(userData);
-    return await this.userRepository.save(newUser);
+  updateEmployee(id: number, employee: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${id}`, employee);
   }
 
-  async updateUser(id: number, userData: Partial<User>): Promise<User | null> {
-    await this.userRepository.update(id, userData);
-    return this.getUserById(id);
+  deleteEmployee(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`);
   }
 
-  async deleteUser(id: number): Promise<boolean> {
-    const result = await this.userRepository.delete(id);
-    return result.affected !== 0;
+  getDepartments(): Observable<any> {
+    return this.http.get<any>(this.departmentApiUrl);
+  }
+
+  getDepartmentById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.departmentApiUrl}/${id}`);
   }
 }
