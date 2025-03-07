@@ -1,41 +1,27 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { AppDataSource } from '../_helpers/db';
+import { Employee } from './employee.entity';
 
-@Injectable({
-  providedIn: 'root',
-})
 export class EmployeeService {
-  private apiUrl = 'https://api.example.com/employees';
-  private departmentApiUrl = 'https://api.example.com/departments';
+    async getAllEmployees() {
+        return await AppDataSource.getRepository(Employee).find({ relations: ['department'] });
+    }
 
-  constructor(private http: HttpClient) {}
+    async getEmployeeById(id: number) {
+        return await AppDataSource.getRepository(Employee).findOne({ where: { id }, relations: ['department'] });
+    }
 
-  getEmployees(): Observable<any> {
-    return this.http.get<any>(this.apiUrl);
-  }
+    async createEmployee(employeeData: Partial<Employee>) {
+        const employee = AppDataSource.getRepository(Employee).create(employeeData);
+        return await AppDataSource.getRepository(Employee).save(employee);
+    }
 
-  getEmployeeById(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${id}`);
-  }
+    async updateEmployee(id: number, employeeData: Partial<Employee>) {
+        await AppDataSource.getRepository(Employee).update(id, employeeData);
+        return await this.getEmployeeById(id);
+    }
 
-  createEmployee(employee: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, employee);
-  }
-
-  updateEmployee(id: number, employee: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${id}`, employee);
-  }
-
-  deleteEmployee(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/${id}`);
-  }
-
-  getDepartments(): Observable<any> {
-    return this.http.get<any>(this.departmentApiUrl);
-  }
-
-  getDepartmentById(id: number): Observable<any> {
-    return this.http.get<any>(`${this.departmentApiUrl}/${id}`);
-  }
+    async deleteEmployee(id: number) {
+        await AppDataSource.getRepository(Employee).delete(id);
+        return { message: 'Employee deleted successfully' };
+    }
 }

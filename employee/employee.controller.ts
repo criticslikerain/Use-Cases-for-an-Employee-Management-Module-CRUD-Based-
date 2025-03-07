@@ -1,31 +1,43 @@
-import { AppDataSource } from "../_helpers/db";
-import { Employee } from "./employee.entity";
+import express, { Request, Response, NextFunction } from 'express';
+import { EmployeeService } from './employee.service';
+import { validateRequest } from '../_middleware/validate-request';
+import { body } from 'express-validator';
 
-export class EmployeeService {
-    private repo = AppDataSource.getRepository(Employee);
+const router = express.Router();
+const employeeService = new EmployeeService();
 
-    async getAll() {
-        return await this.repo.find();
+router.post(
+    '/',
+    validateRequest([
+        body('name').notEmpty().withMessage('Name is required'),
+        body('email').isEmail().withMessage('Invalid email format'),
+        body('position').notEmpty().withMessage('Position is required'),
+    ]),
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const newEmployee = await employeeService.createEmployee(req.body);
+            res.status(201).json(newEmployee);
+        } catch (err) {
+            next(err);
+        }
     }
+);
 
-    async getById(id: number) {
-        return await this.repo.findOneBy({ id });
+router.put(
+    '/:id',
+    validateRequest([
+        body('name').optional().notEmpty().withMessage('Name cannot be empty'),
+        body('email').optional().isEmail().withMessage('Invalid email format'),
+        body('position').optional().notEmpty().withMessage('Position cannot be empty'),
+    ]),
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const updatedEmployee = await employeeService.updateEmployee(Number(req.params.id), req.body);
+            res.json(updatedEmployee);
+        } catch (err) {
+            next(err);
+        }
     }
+);
 
-    async create(employeeData: Partial<Employee>) {
-        const employee = this.repo.create(employeeData);
-        return await this.repo.save(employee);
-    }
-
-    async update(id: number, employeeData: Partial<Employee>) {
-        await this.repo.update(id, employeeData);
-        return this.getById(id);
-    }
-
-    async softDelete(id: number) {
-        const employee = await this.getById(id);
-        if (!employee) return null;
-        employee.isActive = false;
-        return await this.repo.save(employee);
-    }
-}
+export default router;
