@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import { DataSource } from "typeorm";
 import { Employee } from "../employee/employee.entity";
+import { Department } from "../departments/department.entity";
 
 dotenv.config();
   
