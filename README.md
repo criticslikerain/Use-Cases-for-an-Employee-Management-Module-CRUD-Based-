@@ -1,7 +1,7 @@
 
 
-# 📘 Employee Management Module (CRUD-Based)
-A collaborative project where each team member is responsible for implementing a specific feature of the Employee Management Module using **Express.js & TypeORM**.
+# Employee Management Module (CRUD-Based)
+Employee Management Module using **Express.js & TypeORM**.
 
 ## 👥 Team Members & Responsibilities
 
