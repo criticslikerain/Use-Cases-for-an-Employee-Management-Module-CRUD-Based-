@@ -10,7 +10,6 @@ router.post(
     '/',
     validateRequest([
         body('name').notEmpty().withMessage('Name is required'),
-        body('email').isEmail().withMessage('Invalid email format'),
         body('position').notEmpty().withMessage('Position is required'),
     ]),
     async (req: Request, res: Response, next: NextFunction) => {
@@ -27,7 +26,6 @@ router.put(
     '/:id',
     validateRequest([
         body('name').optional().notEmpty().withMessage('Name cannot be empty'),
-        body('email').optional().isEmail().withMessage('Invalid email format'),
         body('position').optional().notEmpty().withMessage('Position cannot be empty'),
     ]),
     async (req: Request, res: Response, next: NextFunction) => {
