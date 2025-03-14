@@ -9,20 +9,29 @@ export class Employee {
     @Column()
     name!: string;
 
-    @Column({nullable: true})
-    salary!: number;
+    @Column({ unique: true })
+    email!: string;
+
+    @Column()
+    password!: string;
+
+    @Column({ nullable: true })
+    salary?: number;
 
     @Column()
     position!: string;
 
     @ManyToOne(() => Department, (department) => department.employees)
-    department!: Department;
+    department?: Department;
 
     @Column({ default: true })
     isActive!: boolean;
-     
+
     @CreateDateColumn()
     hireDate!: Date;
+
+ 
+    departmentId?: number;
 }
 
 export default Employee; 
