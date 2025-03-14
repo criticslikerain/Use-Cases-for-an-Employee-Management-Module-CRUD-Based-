@@ -6,12 +6,37 @@ import { body } from 'express-validator';
 const router = express.Router();
 const employeeService = new EmployeeService();
 
+
+router.get('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const employees = await employeeService.getAllEmployees();
+        res.json(employees);
+    } catch (err) {
+        next(err);
+    }
+});
+
+
+router.get('/:id', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const employee = await employeeService.getEmployeeById(Number(req.params.id));
+        if (!employee) {
+            res.status(404).json({ message: 'Employee not found' });
+            return;
+        }
+        res.json(employee);
+    } catch (err) {
+        next(err);
+    }
+});
+
+
 router.post(
     '/',
     validateRequest([
         body('name').notEmpty().withMessage('Name is required'),
-        body('email').isEmail().withMessage('Invalid email format'),
         body('position').notEmpty().withMessage('Position is required'),
+        body('departmentID').isInt().withMessage('Department ID must be an integer'),
     ]),
     async (req: Request, res: Response, next: NextFunction) => {
         try {
@@ -23,12 +48,13 @@ router.post(
     }
 );
 
+
 router.put(
     '/:id',
     validateRequest([
         body('name').optional().notEmpty().withMessage('Name cannot be empty'),
-        body('email').optional().isEmail().withMessage('Invalid email format'),
         body('position').optional().notEmpty().withMessage('Position cannot be empty'),
+        body('departmentID').optional().isInt().withMessage('Department ID must be an integer'),
     ]),
     async (req: Request, res: Response, next: NextFunction) => {
         try {
