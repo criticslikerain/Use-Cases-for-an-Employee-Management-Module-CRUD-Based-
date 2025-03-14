@@ -6,6 +6,16 @@ import { body } from 'express-validator';
 const router = express.Router();
 const employeeService = new EmployeeService();
 
+router.get('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const getEmployees = await employeeService.getAllEmployees();
+        res.json(getEmployees);
+    } catch (err) {
+        next(err);
+    }
+});
+
+
 router.post(
     '/',
     validateRequest([
